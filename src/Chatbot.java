@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 public class Chatbot {
 
+    // databases of products and products out of stock
     private HashMap<String, String> productDB = fillProductDB();
     private ArrayList<String> unavailable = unavailable();
 
@@ -19,15 +20,20 @@ public class Chatbot {
         try {
             while (sc.hasNextLine()) {
                 String input = sc.nextLine().toLowerCase();
-                if (input.equals("goodbye")) {
-                    System.out.println(goodbye);
-                    System.exit(0);
-                } else if (input.equals("help")) {
-                    System.out.println(help);
-                } else if (input.equals("stock")) {
-                    System.out.println(stock + productDB.keySet() + "\n");
-                } else {
-                    System.out.println(handleInput(input));
+                switch (input) {
+                    case "goodbye":
+                        System.out.println(goodbye);
+                        System.exit(0);
+                        break;
+                    case "help":
+                        System.out.println(help);
+                        break;
+                    case "stock":
+                        System.out.println(stock + productDB.keySet() + "\n");
+                        break;
+                    default:
+                        System.out.println(handleInput(input));
+                        break;
                 }
             }
         } finally {
@@ -47,8 +53,9 @@ public class Chatbot {
             answer = productDB.get(s);
         } else {
             answer = String.format(
-                    "Chatbot: We do not have any %s in our sortiment.\nI will let our customer service team know you are looking for it.",
+                    "Chatbot: We do not have any %s in our inventory.\nI will let our customer service team know you are looking for it.",
                     s);
+            notification(s);
         }
         return "\n" + answer + "\n";
     }
@@ -56,9 +63,9 @@ public class Chatbot {
     public HashMap<String, String> fillProductDB() {
         HashMap<String, String> db = new HashMap<>();
         db.put("hammer",
-                "\nHammers available:\nEstwing Steel Claw Hammer LINK\nHEIKIO Steel-Forged Hammer LINK \nEdward Tools Claw Hammer LINK\n");
-        db.put("saw", "\nSaws available:\nDEWALT saw LINK\nBosch saw LINK\n");
-        db.put("shovel", "\nShovels available:\nBullt Round Point Shovel LINK\nFiskars D-Handle Spade LINK\n");
+                "Hammers available:\nEstwing Steel Claw Hammer LINK\nHEIKIO Steel-Forged Hammer LINK \nEdward Tools Claw Hammer LINK");
+        db.put("saw", "Saws available:\nDEWALT saw LINK\nBosch saw LINK");
+        db.put("shovel", "Shovels available:\nBullt Round Point Shovel LINK\nFiskars D-Handle Spade LINK");
         return db;
     }
 
@@ -70,7 +77,13 @@ public class Chatbot {
         return db;
     }
 
+    // would notify customer service team about the potential new product to be
+    // added to the inventory
+    public void notification(String s) {
+        //
+    }
+
     public static void main(String[] args) {
-        Chatbot cb = new Chatbot();
+        new Chatbot();
     }
 }
